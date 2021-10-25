@@ -26,7 +26,7 @@
 ## Why or When to use ElasticSearch?
 - When you have a lot of text-based data and want to provide keyword based search.
 - To add search functionality in a website. Think search bars in amazon/zomato/<insert any e-commerce platform here>
-- Sift through your partners chat data, to find out whom they are flirting with?
+- Sift through your partners chat data, to find out whom they are flirting with? 😜😉
 
 ## Install ElasticSearch
 - Using docker here
