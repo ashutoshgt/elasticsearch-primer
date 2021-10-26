@@ -25,8 +25,8 @@
 
 ## Why or When to use ElasticSearch?
 - When you have a lot of text-based data and want to provide keyword based search.
-- To add search functionality in a website. Think search bars in amazon/zomato/<insert any e-commerce platform here>
-- Sift through your partners chat data, to find out whom they are flirting with? 😜😉
+- To add search functionality in a website. Think search bars in amazon/zomato/--insert any e-commerce platform here--
+- Sift through your partner's chat data, to find out whom they are flirting with? 😜😉
 
 ## Install ElasticSearch
 - Using docker here
@@ -49,21 +49,58 @@
 ## Important Basic terms/concepts
 
 ### Cluster
-- Health API
+- One or more servers collectively providing indexing and search capabilities form an Elasticsearch cluster.
+- Health API: ```GET _cluster/health```
+  - Green: All shards are allocated
+  - Yellow: Primary shard is allocated but replicas are not 
+  - Red: Primary shard is not allocated in the cluster
 
 ### Nodes
-- Master
-- Data
-- Co-ordinating only Node
+- Single physical or virtual machine that holds full or part of your data and provides computing power for indexing and searching
+- Identified with a unique name
+- Cluster will be formed automatically with all the nodes having the same `cluster.name` at startup
+- Types:
+  - Master
+    - Administrator of the cluster
+    - Think of as a manager, making sure cluster is healthy and stable using certain operations
+    - Only certain master-eligible nodes become master nodes
+    - Election happens among nodes
+  - Data
+    - Stores data
+    - Takes part in indexing, searching, aggregation etc
+    - Every node is by default data node
+  - Co-ordinating only Node
+    - Any node, which is not a master node or a data node, is a coordinating node
+    - Smart load balancers, redirects requests between data nodes and master nodes.
+    - Exposed to end-user requests
+  - ![Image showing diff nodes](https://miro.medium.com/max/4800/1*sNjkqZOFsCA4cf_jQQbgJQ.png)
+  - Nodes list API: ```GET _nodes```
 
 ### Index
-- 
+- Largest unit of data in Elasticsearch
+- Logical partitions of documents
+- Can be compared to a database in the world of relational databases (not necessary true for every case)
+- Index List API ```GET /_cat/indices?v```
+- Create an Index ```PUT /<index>```
+- Delete an Index ```DELETE /<index>```
 
 ### Shards
-- 
+- Subset of an Index
+- Allows horizontal scalability of a cluster
+- Takes part in searching
+- Configurable through API
+- List Shards ```GET /_shard_stores``` or ```GET <index>/_shard_stores```
 
 ### Replicas
-- 
+- Copies of your index’s shards
+- Backup system for a rainy day
+- Replicas also serve read requests, so adding replicas can help to increase search performance
+- To ensure high availability, replicas are not placed on the same node as the original shards (called the “primary” shard) from which they were replicated
+- Configurable through API
+- Can be checked using any index stats api or shards api as well
+- ```GET _cat/indices?v``` or ```GET <index>/_shard_stores```
+
+![Image depicting shards and replicas](https://miro.medium.com/max/4800/1*H7gHSye6qQNEargkRz01og.png)
 
 ### Type
 - 
