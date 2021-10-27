@@ -245,7 +245,7 @@ PUT /shakespeare
  "mappings": {
    "properties": {
     "speaker": {"type": "keyword"},
-    "play_name": {"type": "keyword"},
+    "play_name": {"type": "text"},
     "line_id": {"type": "integer"},
     "speech_number": {"type": "integer"}
    }
