@@ -245,7 +245,7 @@ PUT /shakespeare
  "mappings": {
    "properties": {
     "speaker": {"type": "keyword"},
-    "play_name": {"type": "keyword"},
+    "play_name": {"type": "text"},
     "line_id": {"type": "integer"},
     "speech_number": {"type": "integer"}
    }
@@ -253,11 +253,13 @@ PUT /shakespeare
 }
 ```
 - Index shakespeare plays data
-  - Download json data from here: [link](https://download.elastic.co/demos/kibana/gettingstarted/shakespeare_6.0.json)
+  - Clone this repo locally to get sample data of shakespeare plays (shakespeare_6.0.json)
   - Bulk index using this command: ```curl -H 'Content-Type: application/x-ndjson' -XPOST 'localhost:9500/shakespeare/_bulk?pretty' --data-binary @shakespeare_6.0.json```
 ### Search documents
 - Search in the shakespeare plays 
 ```
+// To match all documents
+
 GET shakespeare/_search
 {
     "query": {
@@ -265,24 +267,29 @@ GET shakespeare/_search
     }
 }
 
+// To search all documents having "Henry" in the play name field, will match with "Henry", "Henry IV" etc.
 GET shakespeare/_search/
 {
   "query":{
     "match" : {
-      "play_name" : "Henry IV"
+      "play_name" : "Henry"
     }
   }
 }
 
-GET shakespeare/_search/
+// To search all documents having string close to "Henr" in the play name field, will match with "Henry", "Henry IV" etc.
+GET shakespeare/_search
 {
-  "query":{
-    "query_string": {
-      "default_field": "play_name",
-      "query": "*Antony*"
+    "query": {
+      "match": {
+        "play_name": {
+          "query": "Henr",
+          "fuzziness": 1
+        }
+      }
     }
-  }
 }
+
 ```
 
 ## References
